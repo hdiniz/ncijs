@@ -1,0 +1,12 @@
+#outputtable { display: none;}
+#userdataheadertable  { display: none;}
+#userdataheader  { display: none;}
+#userdatatable  { display: none;}
+#userdata  { display: none;}
+#consoledebug  { display: none;}
+td.tddata
+{
+    max-width: 150px;
+    overflow: hidden;
+    word-break: break-all;
+}

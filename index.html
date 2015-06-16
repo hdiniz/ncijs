@@ -1,0 +1,82 @@
+<!doctype HTML>
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/bundle.js"></script>
+<script type"text/javascript">
+var nciParser = angular.module('nciParser', []);
+var Nci = require('/nci.js');
+nciParser.controller('nciParserController', function($scope) {
+    $scope.parse = function() {
+        var data = $scope.nciMessages;
+        var regexField = $scope.nciRegEx;
+        if (data === undefined || data.replace(/\s/g, "").length <= 0) return;
+        
+        $scope.nciParserResult = "parsing...\n";
+        
+        var useRegex = false;
+        var regex;
+        if (regexField !== undefined && regexField.replace(/\s/g, "").length > 0) {
+            useRegex = true;
+            regex = new RegExp(regexField);
+        }
+        
+        var lines = data.toString().split(/\n|\r\n/);
+        for (var l in lines) {
+            //$scope.nciParserResult += lines[l] + '\n';
+            var parsed;
+            if (useRegex) {
+                var result;
+                if ((result = regex.exec(lines[l])) !== null) {
+                    parsed = Nci.decode(result[1]).toString();
+                    console.log(parsed);
+                }
+            } else {
+                parsed = Nci.decode(lines[l]).toString();
+                console.log(parsed);
+            }
+            $scope.nciParserResult += parsed + '\n';
+        }
+    }
+});
+
+</script>
+
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+<body>
+
+<div ng-app="nciParser" ng-controller="nciParserController" class="container">
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">RegEx</span>
+                    <input type="text" class="form-control" ng-model="nciRegEx" placeholder="regular expression matching only the NCI messages" id="smspdu">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <textarea spellcheck="false" class="form-control" ng-model="nciMessages" placeholder="" rows="10"></textarea>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-xs-12">
+            <button class="bt btn-lg btn-block btn-primary" ng-click="parse()" type="button">Parse!</button>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-xs-12">
+            <pre>{{ nciParserResult }}</pre>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

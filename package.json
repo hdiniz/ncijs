@@ -1,0 +1,17 @@
+{
+  "name": "ncijs",
+  "version": "0.0.1",
+  "description": "NFC Controller Interface Messages Decoder",
+  "main": "nci_decoder.js",
+  "devDependencies": {
+    "browserify": "~10.2.4"
+  },
+  "scripts": {
+    "build-js": "cd js && browserify -r ./nci.js -o ./bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "dependencies": {
+    "yargs": "~3.11.0"
+  }
+}
